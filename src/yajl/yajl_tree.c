@@ -150,6 +150,7 @@ static yajl_val context_pop(context_t *ctx)
 
     v = stack->value;
 
+    free (stack->key);
     free (stack);
 
     return (v);
@@ -455,7 +456,14 @@ yajl_val yajl_tree_parse (const char *input,
              snprintf(error_buffer, error_buffer_size, "%s", internal_err_str);
              YA_FREE(&(handle->alloc), internal_err_str);
         }
+        while(ctx.stack != NULL) {
+             yajl_val v = context_pop(&ctx);
+             yajl_tree_free(v);
+        }
         yajl_free (handle);
+        //If the requested memory is not released in time, it will cause memory leakage
+        if(ctx.root)
+             yajl_tree_free(ctx.root);
         return NULL;
     }
 
@@ -520,7 +528,7 @@ void yajl_tree_free (yajl_val v)
 yajl_callbacks mem_callbacks;
 context_t mem_ctx;
 
-yajl_handle push_parser_new () {
+yajl_handle push_parser_new (void) {
 
   /* init callback handlers */
   yajl_callbacks *callbacks = &mem_callbacks;

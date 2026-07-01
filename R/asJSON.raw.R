@@ -1,6 +1,5 @@
-setOldClass('blob')
-setMethod("asJSON", "blob", function(x, raw = "base64", ...){
-  if(identical(raw, "base64")){
+setMethod("asJSON", "blob", function(x, raw = "base64", ...) {
+  if (identical(raw, "base64")) {
     str <- vapply(x, base64_enc, character(1))
     return(asJSON(str, ...))
   }
@@ -8,7 +7,6 @@ setMethod("asJSON", "blob", function(x, raw = "base64", ...){
 })
 
 setMethod("asJSON", "raw", function(x, raw = c("base64", "hex", "mongo", "int", "js"), ...) {
-
   # validate
   raw <- match.arg(raw)
 

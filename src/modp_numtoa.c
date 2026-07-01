@@ -5,8 +5,9 @@
 
 #include <stdio.h>
 #include <math.h>
-
-#include "modp_stdint.h"
+#include <string.h>
+#include <stdint.h>
+#include <stdbool.h>
 
 /*
  * other interesting references on num to string convesion
@@ -161,7 +162,7 @@ size_t modp_dtoa(double value, char* str, int prec)
 	   which can be 100s of characters overflowing your buffers == bad
 	   */
 	if (value > thres_max) {
-		sprintf(str, "%e", neg ? -value : value);
+		snprintf(str, 13, "%e", neg ? -value : value);
 		return strlen(str);
 	}
 
@@ -265,7 +266,7 @@ size_t modp_dtoa2(double value, char* str, int prec)
 	   which can be 100s of characters overflowing your buffers == bad
 	   */
 	if (value > thres_max) {
-		sprintf(str, "%e", neg ? -value : value);
+	  snprintf(str, 13, "%e", neg ? -value : value);
 		return strlen(str);
 	}
 
